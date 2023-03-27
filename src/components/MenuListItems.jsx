@@ -1,4 +1,3 @@
-import IconButton from "@mui/material/IconButton"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
@@ -51,6 +50,13 @@ const icons = [
   },
 ]
 
+const iconStyle = {
+  color: "white",
+  "& .MuiSvgIcon-root": { color: "white" },
+  "&:hover": { color: "red" },
+  "&:hover .MuiSvgIcon-root": { color: "red" },
+}
+
 const MenuListItems = () => {
   const navigate = useNavigate()
   return (
@@ -59,13 +65,13 @@ const MenuListItems = () => {
         {icons?.map((item, index) => (
           <ListItem key={index} disablePadding>
             {item.url.includes("http") && (
-              <ListItemButton to={item.url}>
+              <ListItemButton to={item.url} sx={iconStyle}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItemButton>
             )}
             {!item.url.includes("http") && (
-              <ListItemButton onClick={() => navigate(item.url)}>
+              <ListItemButton onClick={() => navigate(item.url)} sx={iconStyle}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItemButton>
