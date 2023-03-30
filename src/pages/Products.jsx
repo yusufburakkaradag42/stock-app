@@ -13,18 +13,18 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import { btnStyle } from "../styles/globalStyle"
 
 const Products = () => {
-  const { getStockData, deleteStockData } = useStockCall()
+  const { deleteStockData, getProCatBrand } = useStockCall()
   const { products } = useSelector((state) => state.stock)
   const [open, setOpen] = useState(false)
 
   const [info, setInfo] = useState({
+    category_id: "",
+    brand_id: "",
     name: "",
-    phone: "",
-    address: "",
-    image: "",
   })
 
   const handleOpen = () => setOpen(true)
+
   const handleClose = () => setOpen(false)
 
   const columns = [
@@ -79,22 +79,25 @@ const Products = () => {
       align: "center",
       minWidth: 50,
       flex: 1,
-      renderCell: ({ id }) => {
-        return (
-          <GridActionsCellItem
-            icon={<DeleteForeverIcon />}
-            label="Delete"
-            sx={btnStyle}
-            onClick={() => deleteStockData("products", id)}
-          />
-        )
-      },
+      renderCell: ({ id }) => (
+        <GridActionsCellItem
+          icon={<DeleteForeverIcon />}
+          label="Delete"
+          sx={btnStyle}
+          onClick={() => deleteStockData("products", id)}
+        />
+      ),
     },
   ]
 
   useEffect(() => {
-    getStockData("products")
-  }, [])
+    // getStockData("products")
+    // getStockData("categories")
+    // getStockData("brands")
+
+    //! Promise All
+    getProCatBrand()
+  }, []) // eslint-disable-line
 
   return (
     <div>
@@ -118,16 +121,12 @@ const Products = () => {
           autoHeight
           rows={products}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
+          pageSize={10}
           disableRowSelectionOnClick
           slots={{ toolbar: GridToolbar }}
+          sx={{
+            boxShadow: 4,
+          }}
         />
       </Box>
     </div>

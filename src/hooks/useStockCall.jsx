@@ -1,14 +1,18 @@
 // import axios from "axios"
-import { useDispatch, useSelector } from "react-redux"
-import { fetchFail, getSuccess, fetchStart } from "../features/stockSlice"
+import { useDispatch } from "react-redux"
+// import { useSelector } from "react-redux"
+import {
+  fetchFail,
+  getSuccess,
+  fetchStart,
+  getProCatBrandSuccess,
+} from "../features/stockSlice"
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify"
 import useAxios from "./useAxios"
-
 const useStockCall = () => {
   const dispatch = useDispatch()
-//   const { token } = useSelector((state) => state.auth)
+  //   const { token } = useSelector((state) => state.auth)
   const { axiosWithToken } = useAxios()
-
   const getStockData = async (url) => {
     // const BASE_URL = "https://12320.fullstack.clarusway.com/"
     dispatch(fetchStart())
@@ -64,7 +68,32 @@ const useStockCall = () => {
     }
   }
 
-  return { getStockData, deleteStockData, postStockData, putStockData }
+  const getProCatBrand = async () => {
+    dispatch(fetchStart())
+    try {
+      const [products, categories, brands] = await Promise.all([
+        axiosWithToken.get("stock/products/"),
+        axiosWithToken.get("stock/categories/"),
+        axiosWithToken.get("stock/brands/"),
+      ])
+
+      dispatch(
+        getProCatBrandSuccess([products?.data, categories?.data, brands?.data])
+      )
+    } catch (error) {
+      console.log(error)
+      dispatch(fetchFail())
+      toastErrorNotify(`Data can not be fetched`)
+    }
+  }
+
+  return {
+    getStockData,
+    deleteStockData,
+    postStockData,
+    putStockData,
+    getProCatBrand,
+  }
 }
 
 export default useStockCall
