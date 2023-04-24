@@ -1,4 +1,8 @@
+ https://stock-app-six.vercel.app/
+
 # Redux Toolkit Ornegi
+
+
 
 ## `Kurulum`
 
